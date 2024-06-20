@@ -1239,6 +1239,11 @@ Lister::Lister(QWidget *parent) : KParts::ReadOnlyPart(parent)
     _textArea->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
     _textArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _textArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    QFont font = _textArea->font();
+    font.setPointSize(8);
+    _textArea->setFont(font);
+
     widget->setFocusProxy(_textArea);
     grid->addWidget(_textArea, 0, 0);
     _scrollBar = new QScrollBar(Qt::Vertical, widget);

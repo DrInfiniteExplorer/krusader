@@ -568,12 +568,16 @@ bool GeneralFilter::getSettings(FilterSettings &s)
 {
     // check that we have (at least) what to search, and where to search in
     if (searchFor->currentText().simplified().isEmpty()) {
+        /*
         KMessageBox::error(this , i18n("No search criteria entered."));
         searchFor->setFocus();
         return false;
+        */
+        s.searchFor = "*";
+    } else {
+        s.searchFor = searchFor->currentText().trimmed();
     }
 
-    s.searchFor = searchFor->currentText().trimmed();
     s.searchForCase = searchForCase->isChecked();
 
     if (ofType->currentText() != i18n("All Files"))

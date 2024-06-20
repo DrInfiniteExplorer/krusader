@@ -31,7 +31,7 @@ class KSqueezedTextLabel;
 class ProfileManager;
 class SearchResultContainer;
 
-class KrSearchDialog : public QDialog
+class KrSearchDialog : public QWidget
 {
     Q_OBJECT
 public:
@@ -57,7 +57,7 @@ public slots:
     void resizeEvent(QResizeEvent *e) override;
 
 protected slots:
-    void reject() override;
+    //void reject() override;
 
 private slots:
     void editCurrent();

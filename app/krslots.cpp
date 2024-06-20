@@ -360,8 +360,8 @@ void KrSlots::search()
         else
             KrSearchDialog::SearchDialog->showNormal();
 
-        KrSearchDialog::SearchDialog->raise();
-        KrSearchDialog::SearchDialog->activateWindow();
+        //KrSearchDialog::SearchDialog->raise();
+        //KrSearchDialog::SearchDialog->activateWindow();
     } else
         KrSearchDialog::SearchDialog = new KrSearchDialog();
 }

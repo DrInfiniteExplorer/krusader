@@ -118,7 +118,7 @@ bool KrSearchDialog::lastContainsRegExp = false;
 
 // class starts here /////////////////////////////////////////
 KrSearchDialog::KrSearchDialog(const QString& profile, QWidget* parent)
-        : QDialog(parent), query(nullptr), searcher(nullptr), isBusy(false), closed(false)
+        : QWidget(parent), query(nullptr), searcher(nullptr), isBusy(false), closed(false)
 {
     KConfigGroup group(krConfig, "Search");
 
@@ -139,7 +139,7 @@ KrSearchDialog::KrSearchDialog(const QString& profile, QWidget* parent)
     buttonsLayout->addWidget(profileManager);
 
     searchTextToClipboard = new QCheckBox(this);
-    searchTextToClipboard->setText(i18n("Query to clipboard"));
+    searchTextToClipboard->setText(i18n("Query to CLIPBOARD"));
     searchTextToClipboard->setToolTip(i18n("Place search text to clipboard when a found file is opened."));
     searchTextToClipboard->setCheckState(static_cast<Qt::CheckState>(group.readEntry("QueryToClipboard", 0)));
     connect(searchTextToClipboard, &QCheckBox::stateChanged, this, [=](int state) {
@@ -366,18 +366,23 @@ void KrSearchDialog::closeDialog(bool isAccept)
     hide();
 
     SearchDialog = nullptr;
+
+    /*
     if (isAccept)
         QDialog::accept();
     else
         QDialog::reject();
+    */
 
     this->deleteLater();
 }
 
+/*
 void KrSearchDialog::reject()
 {
     closeDialog(false);
 }
+*/
 
 void KrSearchDialog::resizeEvent(QResizeEvent *e)
 {
@@ -522,15 +527,23 @@ void KrSearchDialog::closeEvent(QCloseEvent *e)
         closed = true;        /* and after stopping: startSearch can close the window */
         e->ignore();          /* ignoring the close event */
     } else
-        QDialog::closeEvent(e);     /* if no searching, let QDialog handle the event */
+        QWidget::closeEvent(e);     /* if no searching, let QDialog handle the event */
 }
 
 void KrSearchDialog::keyPressEvent(QKeyEvent *e)
 {
     // TODO: don't use hardcoded shortcuts
 
-    if (isBusy && e->key() == Qt::Key_Escape) { /* at searching we must not close the window */
-        stopSearch();         /* so we simply stop searching */
+    if (e->key() == Qt::Key_Escape) { /* at searching we must not close the window */
+        if(isBusy) {
+            stopSearch();         /* so we simply stop searching */
+        } else {
+            closeDialog();
+        }
+        return;
+    }
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
+        startSearch();
         return;
     }
     if (resultView->widget()->hasFocus()) {
@@ -541,7 +554,7 @@ void KrSearchDialog::keyPressEvent(QKeyEvent *e)
             contextMenu(QCursor::pos());
         }
     }
-    QDialog::keyPressEvent(e);
+    QWidget::keyPressEvent(e);
 }
 
 void KrSearchDialog::editCurrent()
